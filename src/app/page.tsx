@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styles from './page.module.css'
-
+import { Button } from 'antd';
 export default function Home() {
   return (
     <main className={styles.main}>
@@ -15,7 +15,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            By{' '}<Button type="primary">Vercel</Button>
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
