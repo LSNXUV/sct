@@ -1,38 +1,34 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styles from './login.module.scss'
-import { useJwt } from '@/lib/hooks/useJwt'
-import { useRouter } from 'next/navigation';
 import {
   Button
 } from 'antd';
-import { login } from '@/lib/api/user/user';
+
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/Auth/Auth';
+import { useMsg } from '@/context/Message/Message';
 
 const LoginPage = () => {
-
-  const [jwt, setjwt] = useJwt();
+  const Auth = useAuth();
   const router = useRouter();
+  const Message = useMsg();
 
   useEffect(() => {
+    // console.log('login init')
+  }, [])
 
-    if (jwt) {
-      
-      console.log("已经登录了，即将跳转到首页");
-      setTimeout(() => {
-        router.push('/');
-      }, 1000);
+  useEffect(() => {
+    if(Auth.isLogin){
+      router.push('/')
     }
-  }, [jwt, router])
+  }, [Auth]);
+
   return (
     <div className={styles.container}>
       <Button type='primary' onClick={() => {
-        if(jwt){
-          setjwt(null);
-        }else{
-          login('root','password').then((res)=>{
-            setjwt(res.data);
-          })
-        }
+         Auth.login('root','password').then(() => {
+        });
       }
       }>Login</Button>
     </div>
