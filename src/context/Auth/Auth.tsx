@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {jwtDecode} from 'jwt-decode';
 import User from '@/lib/api/user/user';
-import { usePathname, useRouter } from 'next/navigation';
-import { useMsg } from '../Message/Message';
+import { useRouter } from 'next/navigation';
+import { App } from 'antd';
 
 // 定义用户信息和JWT的类型
 interface User {
@@ -30,9 +30,9 @@ const getUserFromJWT = (token: string): User | null => {
 // AuthProvider组件
 export const AuthProvider: RFWC = ({ children }) => {
 
-  const Message = useMsg();
+  // const message = useMsg();
+  const {message} = App.useApp()
   const router = useRouter();
-  const pathname = usePathname();
 
   const [isLogin, setIsLogin] = useState(false)
   const [isloading, setIsloading] = useState(true)
@@ -43,9 +43,9 @@ export const AuthProvider: RFWC = ({ children }) => {
   const register = async (username:string,password:string,name:string) => {
     const res = await User.register(username, password, name);
     if(res.code !== 0){
-      Message.error(res.msg);
+      message.error(res.msg);
     }else{
-      Message.success(res.msg);
+      message.success(res.msg);
     }
   }
 
@@ -65,7 +65,7 @@ export const AuthProvider: RFWC = ({ children }) => {
     setIsloading(true)
     const res = await User.login(username, password);
     if(res.code !== 0){
-      Message.error(res.msg);
+      message.error(res.msg);
       return;
     }
     const jwt = res.data;
@@ -76,7 +76,8 @@ export const AuthProvider: RFWC = ({ children }) => {
 
     // setIsloading(false)
     //跳转路由等等
-    Message.success(res.msg);
+    message.success(res.msg);
+    
     setIsloading(false)
     router.back()
   }
@@ -89,7 +90,7 @@ export const AuthProvider: RFWC = ({ children }) => {
     setIsLogin(false);
     setUser(null);
     // setIsloading(true)
-    Message.success('已退出登录');
+    message.success('已退出登录');
     setIsloading(false)
     router.push('/login');
   };
@@ -105,9 +106,9 @@ export const AuthProvider: RFWC = ({ children }) => {
     setIsloading(false);
   }, []);
 
-  useEffect(() => {
+/*   useEffect(() => {
     console.log('Auth change',user,isLogin,jwt);
-  }, [user,isLogin,jwt]);
+  }, [user,isLogin,jwt]); */
 
   return (
     <AuthContext.Provider value={{ user, isLogin,isloading,validateJwt,login,register, logout }}>

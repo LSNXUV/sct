@@ -7,12 +7,10 @@ import {
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/Auth/Auth';
-import { useMsg } from '@/context/Message/Message';
 
 const LoginPage = () => {
   const Auth = useAuth();
   const router = useRouter();
-  const Message = useMsg();
 
   useEffect(() => {
     // console.log('login init')
