@@ -7,16 +7,18 @@ import { Button, Input, Layout, Space } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/Auth/Auth';
 import { useTheme } from '@/context/Theme/Theme';
+import { useRequest } from 'ahooks';
 
 export default function Home() {
 
   const Auth = useAuth();
   const router = useRouter();
   const theme = useTheme()
+
+  
   useEffect(() => {
 
-  }
-    , []);
+  }, []);
 
   useEffect(() => {
     if (!Auth.isloading && !Auth.isLogin) {
