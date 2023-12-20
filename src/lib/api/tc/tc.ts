@@ -1,8 +1,8 @@
 import API from "../API";
 
 import type { ResponseT } from "@/lib/types/Response";
-import type { Teacher } from "../teacher/teacher";
-import type {Course} from "../course/course";
+import type { TeacherType } from "../teacher/teacher";
+import type {CourseType} from "../course/course";
 
 /**
  * {
@@ -27,8 +27,8 @@ import type {Course} from "../course/course";
 
 type TC = {
     id: number;
-    teacher:Teacher,
-    course:Course
+    teacher:TeacherType,
+    course:CourseType
 }
 
 const TCAPI = {

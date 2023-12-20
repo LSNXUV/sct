@@ -14,7 +14,7 @@ import type { ResponseT } from "@/lib/types/Response";
 		}
  */
 
-export type Teacher ={
+export type TeacherType ={
     id:number;
     department:string;
     name:string;
@@ -25,29 +25,29 @@ export type Teacher ={
 }
 
 const TeacherAPI = {
-    all:new API<{},ResponseT<Teacher[]>>({
+    all:new API<{},ResponseT<TeacherType[]>>({
         path:'/teacher/all',
         type:'GET'
     }),
     searchByName:new API<{
         name:string;
-    },ResponseT<Teacher>>({
+    },ResponseT<TeacherType>>({
         path:'/teacher/name',
         type:'GET'
     }),
     searchById:new API<{
         id:number | string;
-    },ResponseT<Teacher>>({
+    },ResponseT<TeacherType>>({
         path:'/teacher/id',
         type:'GET'
     }),
-    save:new API<Teacher,ResponseT<Teacher>>({
+    save:new API<TeacherType,ResponseT<TeacherType>>({
         path:'/teacher/save',
         type:'POST'
     }),
     delete:new API<{
         id:number | string;
-    },ResponseT<Teacher>>({
+    },ResponseT<TeacherType>>({
         path:'/teacher/delete',
         type:'DELETE'
     })
@@ -69,7 +69,7 @@ export const searchById = async (id:number | string) => {
     });
 }
 
-export const save = async (teacher:Teacher) => {
+export const save = async (teacher:TeacherType) => {
     return await TeacherAPI.save.request(teacher);
 }
 

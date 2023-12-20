@@ -3,7 +3,7 @@ import API from "../API";
 
 import type { ResponseT } from "@/lib/types/Response";
 
-export type Course = {
+export type CourseType = {
     id: number;
     name: string;
     credit: number;
@@ -11,23 +11,23 @@ export type Course = {
 }
 
 const CourseAPI = {
-    all:new API<{},ResponseT<Course[]>>({
+    all:new API<{},ResponseT<CourseType[]>>({
         path:'/course/all',
         type:'GET'
     }),
     searchByName:new API<{
         name:string;
-    },ResponseT<Course>>({
+    },ResponseT<CourseType>>({
         path:'/course/name',
         type:'GET'
     }),
-    save:new API<Course,ResponseT<Course>>({
+    save:new API<CourseType,ResponseT<CourseType>>({
         path:'/course/save',
         type:'POST'
     }),
     delete:new API<{
         id:number;
-    },ResponseT<Course>>({
+    },ResponseT<CourseType>>({
         path:'/course/delete',
         type:'DELETE'
     })
@@ -43,7 +43,7 @@ export const searchByName = async (name:string) => {
     });
 }
 
-export const save = async (course:Course) => {
+export const save = async (course:CourseType) => {
     return await CourseAPI.save.request(course);
 }
 

@@ -1,7 +1,7 @@
 import API from "../API";
 import type { ResponseT } from "@/lib/types/Response";
-import type { Course } from "../course/course";
-import type {Student} from "../student/student";
+import type { CourseType } from "../course/course";
+import type {StudentType} from "../student/student";
 /**
  * [
 		{
@@ -27,8 +27,8 @@ import type {Student} from "../student/student";
  */
 type SC = {
     id: number;
-    course:Course,
-    student:Student,
+    course:CourseType,
+    student:StudentType,
     score:number | null;
 }
 
