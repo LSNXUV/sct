@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Response } from "../../types/Response";
+import { ResponseT } from "@/lib/types/Response";
 import API from "../API";
 
 
@@ -7,7 +7,7 @@ const UserAPI = {
     login: new API<{
         username: string;
         password: string;
-    }, Response<string>>({
+    }, ResponseT<string>>({
         path: '/user/login',
         type: 'POST'
     }),
@@ -15,7 +15,7 @@ const UserAPI = {
         username: string;
         password: string;
         name:string;
-    },Response>({
+    },ResponseT>({
         path: '/user/register',
         type: 'POST'
     })

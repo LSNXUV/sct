@@ -1,3 +1,5 @@
+import { Expand } from "./tool";
+
 /**
  * 自定义响应类型
  * @param {number} code 状态码
@@ -20,7 +22,7 @@
  * }
  * ```
  */
-export type Response<T = unknown> = { code: number; msg: string; } & (T extends unknown ? (unknown extends T ? {} : { data: T }) : never);
+export type ResponseT<T = unknown> = Expand< { code: number; msg: string; } & (T extends unknown ? (unknown extends T ? {} : { data: T }) : never)>;
 
 export type ResponseData = {
     code: number;
