@@ -1,6 +1,20 @@
+@font-face {
+    font-family: 'SHSC-SB';
+    src:
+        url('https://raw.githubusercontent.com/jdh8/source-han-serif/master/SourceHanSerifCN-SemiBold.woff2') format('woff2'),
+        url('https://raw.githubusercontent.com/jdh8/source-han-serif/master/SourceHanSerifCN-SemiBold.woff') format('woff'),
+        url('https://raw.githubusercontent.com/jdh8/source-han-serif/master/SourceHanSerifCN-SemiBold.ttf') format('truetype'),
+        url('https://gitee.com/mirrors/source-han-serif/raw/release/SubsetOTF/CN/SourceHanSerifCN-SemiBold.otf') format('opentype'),
+        url('/fonts/SourceHanSerifCN-SemiBold.woff2') format('woff2'),
+        url('/fonts/SourceHanSerifCN-SemiBold.woff') format('woff'),
+        url('/fonts/SourceHanSerifCN-SemiBold.ttf') format('truetype'),
+    ;
+    font-display: swap;
+}
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'SHSC-SB';
 }

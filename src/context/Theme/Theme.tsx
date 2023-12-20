@@ -1,16 +1,20 @@
-
+'use client'
 //全局主题配置
-import React, { createContext, useContext, useState } from 'react';
+import React, { KeyboardEventHandler, createContext, useContext, useEffect, useState } from 'react';
 import { App, ConfigProvider, Layout, Switch, theme } from 'antd';
+import { useKeyWithThing } from '@/hooks/tool';
 
-type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark';
 
 /**
  * 主题Context,用于在全局切换主题
  * @param CurTheme 当前主题
  * @param SwitchTheme 切换主题
  */
-const ThemeContext = createContext({
+const ThemeContext = createContext<{
+    CurTheme: Theme,
+    SwitchTheme: () => void
+}>({
     CurTheme: 'light',
     SwitchTheme: () => { }
 });
@@ -22,24 +26,44 @@ const ThemeAlgorithm = {
 };
 
 export const ThemeProvider: RFWC = ({ children }) => {
-    const [CurTheme, setCurTheme] = useState<Theme>('light');
+    const [CurTheme, setCurTheme] = useState<Theme>('dark');
+
+    useKeyWithThing('Alt+x', () => {
+        SwitchTheme();
+    });
+
+    useEffect(() => {
+        if(localStorage.getItem('theme')){
+            setCurTheme(localStorage.getItem('theme') as Theme)
+        }
+    }, [])
 
     /**
      * 切换主题,目前只有两种主题：light和dark
      */
     const SwitchTheme = () => {
-        setCurTheme(t => t === 'light' ? 'dark' : 'light');
+        setCurTheme(t => {
+            const newTheme = t === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme); // 保存新主题到 localStorage
+            return newTheme;
+        });
     }
 
+
     return (
-        <ThemeContext.Provider value={{ CurTheme, SwitchTheme }}>
+        <ThemeContext.Provider value={{ CurTheme, SwitchTheme }}
+        >
             <ConfigProvider theme={{
                 algorithm: ThemeAlgorithm[CurTheme],
+                token:{
+                    colorBgBase: CurTheme == 'dark' ? '#141414' : '#fff',
+                    fontFamily:'SHSC-SB'
+                }
             }}>
                 <App>
-                    <Layout>
+                    {/* <Layout onKeyDown={onKeySwitchTheme}> */}
                         {children}
-                    </Layout>
+                    {/* </Layout> */}
                 </App>
             </ConfigProvider>
         </ThemeContext.Provider>

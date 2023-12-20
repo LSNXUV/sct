@@ -1,0 +1,134 @@
+
+
+.container {
+    .loading {
+        // Loading文本样式
+        .text {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          font-size: 4rem;
+          text-align: center;
+          color: cornflowerblue;
+      
+          &::after {
+            content: "Loading";
+            animation: TextLoading 4s infinite;
+            animation-delay: 2s;
+            white-space: nowrap;
+          }
+      
+          @keyframes TextLoading {
+      
+            0%,
+            100% {
+              content: "Loading";
+            }
+      
+            25% {
+              content: "Loading.";
+            }
+      
+            50% {
+              content: "Loading..";
+            }
+      
+            75% {
+              content: "Loading...";
+            }
+          }
+        }
+      
+        $ld-cont-width: 500px;
+        $ld-cont-height: 370px;
+        $ld-circle-size: 100px;
+        $ld-shadow-height: 10px;
+        $ld-shadow-top: 185px; //阴影位置
+        $ld-am-duration: .5s;
+      
+        position: relative;
+        // left: 50%;
+        // transform: translate(-50%, -10%);
+        width: $ld-cont-width;
+        height: $ld-cont-height;
+      
+        .circle {
+          width: $ld-circle-size;
+          height: $ld-circle-size;
+          position: absolute;
+          border-radius: 50%;
+          background-color: #8ED4F1;
+          transform-origin: 50%;
+          animation: balls-circle $ld-am-duration ease alternate infinite;
+      
+          &:nth-child(2) {
+            background-color: rgb(133, 172, 243);
+            left: 40%;
+            animation-delay: .2s;
+          }
+      
+          &:nth-child(3) {
+            background-color: #84FAB1;
+            right: 0%;
+            animation-delay: .3s;
+          }
+        }
+      
+        .shadow {
+          width: $ld-circle-size;
+          height: $ld-shadow-height;
+          border-radius: 50%;
+          background-color: rgba(0, 0, 0, 0.25);
+          position: absolute;
+          top: $ld-shadow-top;
+          transform-origin: 50%;
+          filter: blur(1px);
+          animation: balls-shadow $ld-am-duration alternate infinite ease;
+      
+          &:nth-child(4) {
+            left: 40%;
+            animation-delay: .2s;
+          }
+      
+          &:nth-child(5) {
+            left: 80%;
+            animation-delay: .3s;
+          }
+        }
+      
+        @keyframes balls-circle {
+          0% {
+            top: $ld-circle-size * 1.5;
+            height: $ld-shadow-height * 1.2;
+            border-radius: 50px 50px 25px 25px;
+            transform: scaleX(1.7);
+          }
+      
+          40% {
+            height: $ld-circle-size;
+            border-radius: 50%;
+            transform: scaleX(1);
+          }
+      
+          100% {
+            top: 0%;
+          }
+        }
+      
+        @keyframes balls-shadow {
+          0% {
+            transform: scaleX(1.5);
+          }
+      
+          40% {
+            transform: scaleX(1);
+            opacity: .7;
+          }
+      
+          100% {
+            transform: scaleX(.2);
+            opacity: .4;
+          }
+        }
+    }
+}

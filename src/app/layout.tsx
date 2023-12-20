@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import type { Metadata } from 'next'
 
 import { useEffect } from 'react';
@@ -45,9 +45,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  useEffect(() => {
-
-  }, [])
+  
   return (
     <html lang="en">
       <body>
