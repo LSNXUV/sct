@@ -4,7 +4,7 @@ import API from "../API";
 import type { ResponseT } from "@/lib/types/Response";
 
 export type CourseType = {
-    id: number;
+    id: string;
     name: string;
     credit: number;
     hours: number;
@@ -26,7 +26,7 @@ const CourseAPI = {
         type:'POST'
     }),
     delete:new API<{
-        id:number;
+        id:string;
     },ResponseT<CourseType>>({
         path:'/course/delete',
         type:'DELETE'
@@ -47,7 +47,7 @@ export const save = async (course:CourseType) => {
     return await CourseAPI.save.request(course);
 }
 
-export const deleteById = async (id:number) => {
+export const deleteById = async (id:string) => {
     return await CourseAPI.delete.request({
         id
     });

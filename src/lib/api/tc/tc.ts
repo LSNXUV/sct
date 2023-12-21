@@ -25,27 +25,27 @@ import type {CourseType} from "../course/course";
 	}
  */
 
-type TC = {
+type TCType = {
     id: number;
     teacher:TeacherType,
     course:CourseType
 }
 
 const TCAPI = {
-    all:new API<{},ResponseT<TC[]>>({
+    all:new API<{},ResponseT<TCType[]>>({
         path:'/tc/all',
         type:'GET'
     }),
     save:new API<{
         tid:number | string;
         cid:number | string;
-    },ResponseT<TC>>({
+    },ResponseT<TCType>>({
         path:'/tc/save',
         type:'POST'
     }),
     delete:new API<{
         id:number | string;
-    },ResponseT<TC>>({
+    },ResponseT<TCType>>({
         path:'/tc/delete',
         type:'DELETE'
     })

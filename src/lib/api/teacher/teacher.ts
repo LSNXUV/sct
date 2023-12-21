@@ -15,7 +15,7 @@ import type { ResponseT } from "@/lib/types/Response";
  */
 
 export type TeacherType ={
-    id:number;
+    id:string;
     department:string;
     name:string;
     age:number;

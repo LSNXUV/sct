@@ -3,7 +3,7 @@
 import React, { KeyboardEventHandler, createContext, useContext, useEffect, useState } from 'react';
 import { App, ConfigProvider, Layout, Switch, theme } from 'antd';
 import { useKeyWithThing } from '@/hooks/tool';
-
+import zhCN from 'antd/locale/zh_CN';
 export type Theme = 'light' | 'dark';
 
 /**
@@ -33,7 +33,7 @@ export const ThemeProvider: RFWC = ({ children }) => {
     });
 
     useEffect(() => {
-        if(localStorage.getItem('theme')){
+        if (localStorage.getItem('theme')) {
             setCurTheme(localStorage.getItem('theme') as Theme)
         }
     }, [])
@@ -53,16 +53,18 @@ export const ThemeProvider: RFWC = ({ children }) => {
     return (
         <ThemeContext.Provider value={{ CurTheme, SwitchTheme }}
         >
-            <ConfigProvider theme={{
-                algorithm: ThemeAlgorithm[CurTheme],
-                token:{
-                    colorBgBase: CurTheme == 'dark' ? '#141414' : '#fff',
-                    fontFamily:'SHSC-SB'
-                }
-            }}>
+            <ConfigProvider
+                locale={zhCN}
+                theme={{
+                    algorithm: ThemeAlgorithm[CurTheme],
+                    token: {
+                        colorBgBase: CurTheme == 'dark' ? '#111' : '#fff',
+                        fontFamily: 'SHSC-SB'
+                    }
+                }}>
                 <App>
                     {/* <Layout onKeyDown={onKeySwitchTheme}> */}
-                        {children}
+                    {children}
                     {/* </Layout> */}
                 </App>
             </ConfigProvider>

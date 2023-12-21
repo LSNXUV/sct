@@ -1,36 +1,32 @@
 'use client'
 import { FLayout } from '@/components/Layout/Layout'
 import CusMenu from '@/components/Menu/Menu'
-import Student from '@/lib/api/student/student'
+import Course, { CourseType } from '@/lib/api/course/course'
 import { SearchOutlined } from '@ant-design/icons';
 import { App, Button, Form, Input, InputNumber, InputRef, Popconfirm, Popover, Space, Table } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Title from 'antd/es/typography/Title'
 import React, { useEffect, useRef, useState } from 'react'
-import type { StudentType } from '@/lib/api/student/student'
 import { useRequest } from 'ahooks'
 import { ColumnsType } from 'antd/es/table'
 import { ColumnType, FilterConfirmProps } from 'antd/es/table/interface';
 
 /**
- * type StudentType = {
-    id:string,
-    major:string,
-    name:string,
-    age:number,
-    gender:string,
-    phone:string,
-    email:string
+ * type CourseType = {
+    id: string;
+    name: string;
+    credit: number;
+    hours: number;
 }
  */
 
-type DataIndex = keyof StudentType;
+type DataIndex = keyof CourseType;
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     editing: boolean;
     dataIndex: string;
     title: any;
     inputType: 'number' | 'text';
-    record: StudentType;
+    record: CourseType;
     index: number;
     children: React.ReactNode;
 }
@@ -69,9 +65,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
     );
 };
 
-function Students() {
+function Courses() {
     const { message } = App.useApp()
-    const [Students, setStudents] = useState<StudentType[]>([])
+    const [Courses, setCourses] = useState<CourseType[]>([])
     const [form] = Form.useForm();
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [searchText, setSearchText] = useState('');
@@ -80,8 +76,8 @@ function Students() {
 
     const [editingKey, setEditingKey] = useState('');
 
-    const isEditing = (record: StudentType) => record.id === editingKey;
-    const edit = (record: Partial<StudentType>) => {
+    const isEditing = (record: CourseType) => record.id === editingKey;
+    const edit = (record: Partial<CourseType>) => {
         form.setFieldsValue({ name: '', age: '', address: '', ...record });
         setEditingKey(record.id ?? '');
     };
@@ -89,11 +85,11 @@ function Students() {
         setEditingKey('');
     };
 
-    const saveStudents = async (key: React.Key) => {
-        const row = (await form.validateFields()) as StudentType;
-        const newData = [...Students];
+    const saveCourses = async (key: React.Key) => {
+        const row = (await form.validateFields()) as CourseType;
+        const newData = [...Courses];
         const index = newData.findIndex((item) => key === item.id);
-        const res = await Student.save({ ...row, id: key as string })
+        const res = await Course.save({ ...row, id: key as string })
         if (res.code !== 0) {
             message.error(res.msg)
             return
@@ -104,27 +100,27 @@ function Students() {
                 ...item,
                 ...row,
             });
-            setStudents(newData);
+            setCourses(newData);
             setEditingKey('');
             message.success('保存成功')
         } else {
             newData.push(row);
-            setStudents(newData);
+            setCourses(newData);
             setEditingKey('');
         }
     };
 
-    const deleteStudents = async (key: React.Key) => {
-        const newData = [...Students];
+    const deleteCourses = async (key: React.Key) => {
+        const newData = [...Courses];
         const index = newData.findIndex((item) => key === item.id);
-        const res = await Student.deleteById(key as string)
+        const res = await Course.deleteById(key as string)
         if (res.code !== 0) {
             message.error(res.msg)
             return
         }
         if (index > -1) {
             newData.splice(index, 1);
-            setStudents(newData);
+            setCourses(newData);
             setEditingKey('');
             message.success('删除成功')
         } else {
@@ -147,7 +143,7 @@ function Students() {
         setSearchText('');
     };
 
-    const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<StudentType> => ({
+    const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<CourseType> => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
                 <Input
@@ -214,101 +210,32 @@ function Students() {
 
     const columns = [
         {
-            title: '学号',
+            title: '课号',
             dataIndex: 'id',
             editable: false,
         },
         {
-            title: '姓名',
+            title: '课程名',
             dataIndex: 'name',
             editable: true,
             ...getColumnSearchProps('name'),
-            sorter: (a: StudentType, b: StudentType) => a.name.localeCompare(b.name),
+            sorter: (a: CourseType, b: CourseType) => a.name.localeCompare(b.name),
         },
         {
-            title: '年龄',
-            dataIndex: 'age',
+            title: '学分',
+            dataIndex: 'credit',
             editable: true,
-            sorter: (a: StudentType, b: StudentType) => a.age - b.age,
+            sorter: (a: CourseType, b: CourseType) => a.credit - b.credit,
         },
         {
-            title: '性别',
-            dataIndex: 'gender',
+            title: '学时',
+            dataIndex: 'hours',
             editable: true,
-            filters: [
-                { text: '男', value: '男' },
-                { text: '女', value: '女' },
-            ],
-            onFilter: (value: boolean | React.Key, record: StudentType) => record.gender === value,
-        },
-        {
-            title: '专业',
-            dataIndex: 'major',
-            editable: true,
-            filters: [
-                { text: '计算机科学与技术', value: '计算机科学与技术' },
-                { text: '金融科技', value: '金融科技' },
-                { text: '自动化', value: '自动化' },
-                { text: '工商管理', value: '工商管理' },
-                { text: '国际旅游', value: '国际旅游' },
-                { text: '人工智能', value: '人工智能' },
-                { text: '生物工程', value: '生物工程' },
-                { text: '机械工程', value: '机械工程' },
-                { text: '心理学', value: '心理学' },
-                { text: '法律学', value: '法律学' },
-                { text: '市场营销', value: '市场营销' },
-                { text: '环境科学', value: '环境科学' },
-                { text: '历史学', value: '历史学' },
-                { text: '天文学', value: '天文学' },
-                { text: '国际贸易', value: '国际贸易' },
-                { text: '音乐学', value: '音乐学' },
-                { text: '教育学', value: '教育学' },
-                { text: '物理学', value: '物理学' },
-                { text: '社会学', value: '社会学' },
-                { text: '软件工程', value: '软件工程' },
-                { text: '天文学', value: '天文学' },
-                { text: '天文学', value: '天文学' },
-                { text: '软件工程', value: '软件工程' },
-                { text: '网络工程', value: '网络工程' },
-                { text: '信息安全', value: '信息安全' },
-                { text: '物联网工程', value: '物联网工程' },
-                { text: '电子信息工程', value: '电子信息工程' },
-                { text: '通信工程', value: '通信工程' },
-                { text: '电子科学与技术', value: '电子科学与技术' },
-                { text: '集成电路设计与集成系统', value: '集成电路设计与集成系统' },
-                { text: '电磁场与无线技术', value: '电磁场与无线技术' },
-                { text: '测控技术与仪器', value: '测控技术与仪器' },
-                { text: '机械设计制造及其自动化', value: '机械设计制造及其自动化' },
-                { text: '工业设计', value: '工业设计' },
-                { text: '过程装备与控制工程', value: '过程装备与控制工程' },
-                { text: '车辆工程', value: '车辆工程' },
-                { text: '工业工程', value: '工业工程' },
-                { text: '材料成型及控制工程', value: '材料成型及控制工程' },
-                { text: '材料科学与工程', value: '材料科学与工程' },
-                { text: '高分子材料与工程', value: '高分子材料与工程' },
-            ],
-            filterMode: 'tree',
-            // filterSearch: true,
-            onFilter: (value: boolean | React.Key, record: StudentType) => record.major.includes(value as string) ,
-            sorter: (a: StudentType, b: StudentType) => a.major.localeCompare(b.major),
-        },
-        {
-            title: '手机号',
-            dataIndex: 'phone',
-            editable: true,
-            ...getColumnSearchProps('phone'),
-            sorter: (a: StudentType, b: StudentType) => a.phone.localeCompare(b.phone),
-        },
-        {
-            title: '邮箱',
-            dataIndex: 'email',
-            editable: true,
-            ...getColumnSearchProps('email'),
-            sorter: (a: StudentType, b: StudentType) => a.email.localeCompare(b.email),
+            sorter: (a: CourseType, b: CourseType) => a.hours - b.hours,
         }, {
             title: 'action',
             dataIndex: 'action',
-            render: (_: any, record: StudentType) => {
+            render: (_: any, record: CourseType) => {
                 const editable = isEditing(record);
                 return (
                     <>
@@ -316,7 +243,7 @@ function Students() {
                             {
                                 editable ? (
                                     <Space>
-                                        <Button type='primary' onClick={() => saveStudents(record.id)}>保存</Button>
+                                        <Button type='primary' onClick={() => saveCourses(record.id)}>保存</Button>
                                         <Button type='default' onClick={cancel}>取消</Button>
                                     </Space>
                                 ) : (
@@ -325,8 +252,8 @@ function Students() {
                             }
                             <Popconfirm
                                 title="确定删除?"
-                                onConfirm={async () => {
-                                    await deleteStudents(record.id)
+                                onConfirm={async() => {
+                                    await deleteCourses(record.id)
                                 }}
                                 okText="确定"
                                 cancelText="取消"
@@ -347,9 +274,9 @@ function Students() {
         }
         return {
             ...col,
-            onCell: (record: StudentType) => ({
+            onCell: (record: CourseType) => ({
                 record,
-                inputType: col.dataIndex === 'age' ? 'number' : 'text',
+                inputType: col.dataIndex === 'credit' || col.dataIndex === 'hours' ? 'number' : 'text',
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
@@ -357,15 +284,15 @@ function Students() {
         };
     });
 
-    const { data: _, loading: loadingStudents, run: getStudents } = useRequest(
-        () => Student.getAll(),
+    const { data: _, loading: loadingStudents, run: getCourses } = useRequest(
+        () => Course.getAll(),
         {
             manual: true,
             throttleWait: 500,
             onSuccess: (res) => {
                 if (res.code === 0) {
                     message.success('获取成功')
-                    setStudents(res.data.content)
+                    setCourses(res.data)
                 }
             },
             onError: (error) => {
@@ -376,9 +303,9 @@ function Students() {
     )
 
     useEffect(() => {
-        getStudents()
+        getCourses()
 
-    }, [getStudents])
+    }, [getCourses])
 
 
     return (
@@ -394,10 +321,10 @@ function Students() {
 
                     }}
                     onClick={() => {
-                        getStudents()
+                        getCourses()
                     }}
                 >
-                    学生概况
+                    课程概况
                 </Title>
             </Popover>
             <Form form={form} component={false}>
@@ -448,13 +375,13 @@ function Students() {
                         ],
                     }}
                     loading={loadingStudents}
-                    dataSource={Students.map((item) => {
+                    dataSource={Courses.map((item) => {
                         return {
                             ...item,
                             key: item.id
                         }
                     })}
-                    columns={mergedColumns as ColumnsType<StudentType>}
+                    columns={mergedColumns as ColumnsType<CourseType>}
                     pagination={{
                         onChange: cancel,
                         pageSize: 8,
@@ -469,8 +396,8 @@ function Students() {
 function StudentPage() {
     return (
         <FLayout>
-            <CusMenu OpenSubKey={['2']} SelectKey='21' />
-            <Students />
+            <CusMenu OpenSubKey={['3']} SelectKey='31' />
+            <Courses />
         </FLayout>
     )
 }

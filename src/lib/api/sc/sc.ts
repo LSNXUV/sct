@@ -2,8 +2,8 @@ import API from "../API";
 import type { ResponseT } from "@/lib/types/Response";
 import type { CourseType } from "../course/course";
 import type {StudentType} from "../student/student";
-/**
- * [
+/*
+ [
 		{
 			"id": 11,
 			"course": {
@@ -25,47 +25,47 @@ import type {StudentType} from "../student/student";
 		}
 	]
  */
-type SC = {
-    id: number;
+export type SCType = {
+    id: string;
     course:CourseType,
     student:StudentType,
-    score:number | null;
+    score:number;
 }
 
 const SCAPI = {
-    all:new API<{},ResponseT<SC[]>>({
+    all:new API<{},ResponseT<SCType[]>>({
         path:'/sc/all',
         type:'GET'
     }),
     score:new API<{
         id:number | string;
         score:number|null;
-    },ResponseT<SC>>({
+    },ResponseT<SCType>>({
         path:'/sc/score',
         type:'POST'
     }),
     courseScore:new API<{
         name:string;
-    },ResponseT<SC[]>>({
+    },ResponseT<SCType[]>>({
         path:'/sc/scores/name',
         type:'GET'
     }),
     studentScore:new API<{
         name:string;
-    },ResponseT<SC[]>>({
+    },ResponseT<SCType[]>>({
         path:'/sc/scores/student',
         type:'GET'
     }),
     save:new API<{
         cid:string | number;
         sid:string | number;
-    },ResponseT<SC>>({
+    },ResponseT<SCType>>({
         path:'/sc/save',
         type:'POST'
     }),
     delete:new API<{
         id:string;
-    },ResponseT<SC>>({
+    },ResponseT<SCType>>({
         path:'/sc/delete',
         type:'DELETE'
     })

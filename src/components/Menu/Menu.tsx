@@ -34,6 +34,18 @@ function getItem(
     } as MenuItem;
 }
 
+function getSubItem(
+    label: React.ReactNode,
+    key?: React.Key | null,
+    icon?: React.ReactNode,
+): MenuItem {
+    return {
+        key,
+        icon,
+        label,
+    } as MenuItem;
+}
+
 const RouterEnum = {
     '1': '/',
     '21': '/student',
@@ -44,7 +56,7 @@ const RouterEnum = {
     '42': '/sc/course',
     '51': '/teacher',
     '52': '/teacher/add',
-
+    '6': '/grade',
     '9': '/login'
 }
 
@@ -64,12 +76,13 @@ const items = [
         getItem('学生选课', '41'),
         getItem('教师选课', '42')
     ]),
-
+    getItem("成绩管理", "6", <LeftCircleOutlined />),
     getItem("教师管理", "5", <UserOutlined />, [
         getItem('教师概况', '51'),
         getItem('添加教师', '52'),
     ]),
 
+    
     getItem("退出登录", "9", <LogoutOutlined />),
 
 ]

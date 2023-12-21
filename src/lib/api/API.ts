@@ -53,7 +53,8 @@ class API<Request extends object,Response extends ResponseData> {
                 data: request,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': auth ? `Bearer ${localStorage.getItem('sk')}` : '',
+                    // 'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': auth ? `${localStorage.getItem('sk')}` : '',
                 }
             }).then((res) => {
                 const { code, msg, data } = res.data;

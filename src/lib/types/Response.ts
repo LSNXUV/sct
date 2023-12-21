@@ -22,7 +22,9 @@ import { Expand } from "./tool";
  * }
  * ```
  */
-export type ResponseT<T = unknown> = Expand< { code: number; msg: string; } & (T extends unknown ? (unknown extends T ? {} : { data: T }) : never)>;
+export type ResponseT<T = unknown> = Expand<
+    { code: number; msg: string; } 
+&   (T extends unknown ? (unknown extends T ? {} : { data: T }) : never)>;
 
 export type ResponseData = {
     code: number;
