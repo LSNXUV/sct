@@ -52,8 +52,6 @@ const RouterEnum = {
     '22': '/student/add',
     '31': '/course',
     '32': '/course/add',
-    '41': '/sc/student',
-    '42': '/sc/course',
     '51': '/teacher',
     '52': '/teacher/add',
     '6': '/grade',
@@ -72,10 +70,6 @@ const items = [
         getItem('添加课程', '32'),
     ]),
 
-    getItem("选课管理", "4", <FileTextOutlined />, [
-        getItem('学生选课', '41'),
-        getItem('教师选课', '42')
-    ]),
     getItem("成绩管理", "6", <LeftCircleOutlined />),
     getItem("教师管理", "5", <UserOutlined />, [
         getItem('教师概况', '51'),

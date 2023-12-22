@@ -4,8 +4,8 @@ import type { ResponseT } from "@/lib/types/Response";
 import type { TeacherType } from "../teacher/teacher";
 import type {CourseType} from "../course/course";
 
-/**
- * {
+/*
+ {
 		"id": 1,
 		"teacher": {
 			"id": 20190102,
@@ -25,8 +25,8 @@ import type {CourseType} from "../course/course";
 	}
  */
 
-type TCType = {
-    id: number;
+export type TCType = {
+    id: string;
     teacher:TeacherType,
     course:CourseType
 }
@@ -55,7 +55,7 @@ export const getAll = async () => {
     return await TCAPI.all.request({});
 }
 
-export const save = async (tid:string,cid:string) => {
+export const save = async (cid:string,tid:string) => {
     return await TCAPI.save.request({
         tid,
         cid

@@ -58,7 +58,8 @@ export const ThemeProvider: RFWC = ({ children }) => {
                 theme={{
                     algorithm: ThemeAlgorithm[CurTheme],
                     token: {
-                        colorBgBase: CurTheme == 'dark' ? '#111' : '#fff',
+                        colorPrimary:'#13A8EF', // 主色
+                        colorBgBase: CurTheme == 'dark' ? '#111' : '#FDFDFD',
                         fontFamily: 'SHSC-SB'
                     }
                 }}>
