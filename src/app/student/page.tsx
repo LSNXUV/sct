@@ -356,7 +356,9 @@ function Students() {
             manual: true,
             throttleWait: 500,
             onSuccess: (res) => {
-                Auth.resCall(res)
+                Auth.resCall(res,() => {
+                    setStudents(res.data.content)
+                })
             },
             onError: (error) => {
                 message.error('获取失败')

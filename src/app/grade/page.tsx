@@ -117,7 +117,6 @@ function SCs() {
             });
             setCourses(newData);
             setEditingKey('');
-            message.success('保存成功')
         } else {
             newData.push(row);
             setCourses(newData);
@@ -134,7 +133,6 @@ function SCs() {
             newData.splice(index, 1);
             setCourses(newData);
             setEditingKey('');
-            message.success('删除成功')
         } else {
             message.error('删除失败')
         }
@@ -204,19 +202,27 @@ function SCs() {
         filterIcon: (filtered: boolean) => (
             <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
         ),
-        onFilter: (value, record) =>
-            record[dataIndex]
-                .toString()
-                .toLowerCase()
-                .includes((value as string).toLowerCase()),
+        onFilter: (value, record:SCType) =>{
+            if(dataIndex === 'course' || dataIndex === 'student')
+                return record[dataIndex].name
+                    .toString()
+                    .toLowerCase()
+                    .includes((value as string).toLowerCase())
+            return record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes((value as string).toLowerCase())
+        },
         onFilterDropdownOpenChange: (visible) => {
             if (visible) {
                 setTimeout(() => searchInput.current?.select(), 100);
             }
         },
-        render: (text) =>
+        render: (text) => {
+            return text.name ?? text
+        }
                 //如果text是对象，那么就是course或者student，需要取name
-                typeof text === 'object' ? (text as CourseType).name : text
+                
     });
 
     const columns = [
@@ -229,8 +235,22 @@ function SCs() {
             title: '课程名',
             dataIndex: 'course',
             editable: false,
-            ...getColumnSearchProps('course'),
+            
+            filters: [
+                { text: '计算机体系结构',value: '计算机体系结构'},
+                { text: '软件工程',value: '软件工程'},
+                { text: '形势与政策',value: '形势与政策'},
+                { text: '计算机网络',value: '计算机网络'},
+                { text: '操作系统',value: '操作系统'},
+                { text: '生态文明',value: '生态文明'}
+            ],
+            render: (text:CourseType) => {
+                return text.name ?? text
+            },
+            onFilter: (value:boolean | React.Key, record:SCType) => record.course.name.includes(value as string),
+            // ...getColumnSearchProps('course'),
             sorter: (a: SCType, b: SCType) => a.course.name.localeCompare(b.course.name),
+           
         },
         {
             title: '学生名',
@@ -238,6 +258,7 @@ function SCs() {
             editable: false,
             ...getColumnSearchProps('student'),
             sorter: (a: SCType, b: SCType) => a.student.name.localeCompare(b.student.name),
+            
         },
         {
             title: '分数',
@@ -337,7 +358,7 @@ function SCs() {
                         getCourses()
                     }}
                 >
-                    课程概况
+                    成绩概况
                 </Title>
             </Popover>
             <Form form={form} component={false}>
