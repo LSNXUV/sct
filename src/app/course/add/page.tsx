@@ -13,6 +13,7 @@ import Title from 'antd/es/typography/Title'
 import React from 'react'
 import type { CourseType } from '@/lib/api/course/course'
 import Course from '@/lib/api/course/course'
+import { useAuth } from '@/context/Auth/Auth'
 
 /*
  type CourseType = {
@@ -24,18 +25,12 @@ import Course from '@/lib/api/course/course'
  */
 
 
-
 const AddComponent = () => {
     const [form] = Form.useForm();
-    const {message} = App.useApp()
+    const Auth = useAuth()
     const onFinish =async (values: CourseType) => {
-        
         const res = await Course.save(values)
-        if(res.code === 0){
-            message.success('添加成功')
-            return
-        }
-        message.error(res.msg)
+        Auth.resCall(res)
     };
     const formItemLayout = {
         labelCol: {

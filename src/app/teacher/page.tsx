@@ -12,6 +12,7 @@ import type { TeacherType } from '@/lib/api/teacher/teacher'
 import { useRequest } from 'ahooks'
 import { ColumnsType } from 'antd/es/table'
 import { ColumnType, FilterConfirmProps } from 'antd/es/table/interface';
+import { useAuth } from '@/context/Auth/Auth';
 
 /**
  * type TeacherType ={
@@ -78,7 +79,7 @@ function Teachers() {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-
+    const Auth = useAuth()
     const [editingKey, setEditingKey] = useState('');
 
     const isEditing = (record: TeacherType) => record.id === editingKey;
@@ -95,10 +96,7 @@ function Teachers() {
         const newData = [...Teachers];
         const index = newData.findIndex((item) => key === item.id);
         const res = await Teacher.save({ ...row, id: key as string })
-        if (res.code !== 0) {
-            message.error(res.msg)
-            return
-        }
+        Auth.resCall(res)
         if (index > -1) {
             const item = newData[index];
             newData.splice(index, 1, {
@@ -107,7 +105,6 @@ function Teachers() {
             });
             setStudents(newData);
             setEditingKey('');
-            message.success('保存成功')
         } else {
             newData.push(row);
             setStudents(newData);
@@ -119,15 +116,11 @@ function Teachers() {
         const newData = [...Teachers];
         const index = newData.findIndex((item) => key === item.id);
         const res = await Teacher.deleteById(key as string)
-        if (res.code !== 0) {
-            message.error(res.msg)
-            return
-        }
+        Auth.resCall(res)
         if (index > -1) {
             newData.splice(index, 1);
             setStudents(newData);
             setEditingKey('');
-            message.success('删除成功')
         } else {
             message.error('删除失败')
         }
@@ -346,10 +339,9 @@ function Teachers() {
             manual: true,
             throttleWait: 500,
             onSuccess: (res) => {
-                if (res.code === 0) {
-                    message.success('获取成功')
+                Auth.resCall(res,() => {
                     setStudents(res.data)
-                }
+                })
             },
             onError: (error) => {
                 message.error('获取失败')

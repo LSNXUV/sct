@@ -12,6 +12,7 @@ import { ColumnsType } from 'antd/es/table'
 import { ColumnType, FilterConfirmProps } from 'antd/es/table/interface';
 import { CourseType } from '@/lib/api/course/course';
 import { StudentType } from '@/lib/api/student/student';
+import { useAuth } from '@/context/Auth/Auth';
 
 /*
 type StudentType = {
@@ -90,7 +91,7 @@ function SCs() {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-
+    const Auth = useAuth()
     const [editingKey, setEditingKey] = useState('');
 
     const isEditing = (record: SCType) => record.id === editingKey;
@@ -107,10 +108,7 @@ function SCs() {
         const newData = [...SCs];
         const index = newData.findIndex((item) => key === item.id);
         const res = await SC.score(key,row.score)
-        if (res.code !== 0) {
-            message.error(res.msg)
-            return
-        }
+        Auth.resCall(res)
         if (index > -1) {
             const item = newData[index];
             newData.splice(index, 1, {
@@ -131,10 +129,7 @@ function SCs() {
         const newData = [...SCs];
         const index = newData.findIndex((item) => key === item.id);
         const res = await SC.deleteById(key as string)
-        if (res.code !== 0) {
-            message.error(res.msg)
-            return
-        }
+        Auth.resCall(res)
         if (index > -1) {
             newData.splice(index, 1);
             setCourses(newData);
@@ -309,10 +304,9 @@ function SCs() {
             manual: true,
             throttleWait: 500,
             onSuccess: (res) => {
-                if (res.code === 0) {
-                    message.success('获取成功')
+                Auth.resCall(res,() => {
                     setCourses(res.data)
-                }
+                })
             },
             onError: (error) => {
                 message.error('获取失败')

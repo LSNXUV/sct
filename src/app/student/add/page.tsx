@@ -13,6 +13,7 @@ import Title from 'antd/es/typography/Title'
 import React from 'react'
 import type { StudentType } from '@/lib/api/student/student'
 import Student from '@/lib/api/student/student'
+import { useAuth } from '@/context/Auth/Auth'
 
 /*
  type StudentType = {
@@ -50,20 +51,15 @@ const emailSuffixSelector = (
 
 const AddComponent = () => {
     const [form] = Form.useForm();
-    const {message} = App.useApp()
+    const Auth = useAuth()
     const onFinish =async (values: StudentType &{
         prefix: string;
         suffix: string;
     }) => {
         
         values.email = values.email + values.suffix
-        // values.phone = values.prefix + values.phone
         const res = await Student.save(values)
-        if(res.code === 0){
-            message.success('添加成功')
-            return
-        }
-        message.error(res.msg)
+        Auth.resCall(res)
     };
     const formItemLayout = {
         labelCol: {

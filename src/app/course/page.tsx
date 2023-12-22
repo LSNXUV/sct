@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { ColumnsType } from 'antd/es/table'
 import { ColumnType, FilterConfirmProps } from 'antd/es/table/interface';
+import { useAuth } from '@/context/Auth/Auth';
 
 /**
  * type CourseType = {
@@ -73,7 +74,7 @@ function Courses() {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-
+    const Auth = useAuth()
     const [editingKey, setEditingKey] = useState('');
 
     const isEditing = (record: CourseType) => record.id === editingKey;
@@ -90,10 +91,7 @@ function Courses() {
         const newData = [...Courses];
         const index = newData.findIndex((item) => key === item.id);
         const res = await Course.save({ ...row, id: key as string })
-        if (res.code !== 0) {
-            message.error(res.msg)
-            return
-        }
+        Auth.resCall(res)
         if (index > -1) {
             const item = newData[index];
             newData.splice(index, 1, {
@@ -102,7 +100,6 @@ function Courses() {
             });
             setCourses(newData);
             setEditingKey('');
-            message.success('保存成功')
         } else {
             newData.push(row);
             setCourses(newData);
@@ -114,15 +111,11 @@ function Courses() {
         const newData = [...Courses];
         const index = newData.findIndex((item) => key === item.id);
         const res = await Course.deleteById(key as string)
-        if (res.code !== 0) {
-            message.error(res.msg)
-            return
-        }
+        Auth.resCall(res)
         if (index > -1) {
             newData.splice(index, 1);
             setCourses(newData);
             setEditingKey('');
-            message.success('删除成功')
         } else {
             message.error('删除失败')
         }
@@ -290,10 +283,9 @@ function Courses() {
             manual: true,
             throttleWait: 500,
             onSuccess: (res) => {
-                if (res.code === 0) {
-                    message.success('获取成功')
+                Auth.resCall(res,() => {
                     setCourses(res.data)
-                }
+                })
             },
             onError: (error) => {
                 message.error('获取失败')

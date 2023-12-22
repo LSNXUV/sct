@@ -6,6 +6,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { App } from 'antd';
 import BalldanceLoading from '@/components/Balldance/balldance';
 import { useTheme } from '../Theme/Theme';
+import { ResponseData } from '@/lib/types/Response';
+import { MessageInstance } from 'antd/lib/message/interface';
 
 // 定义用户信息和JWT的类型
 interface User {
@@ -16,6 +18,7 @@ interface AuthContextType {
   user: User | null;
   isLogin: boolean;
   isloading: boolean;
+  resCall:(res:ResponseData,callback?:()=>void)=>void;
   validateJwt: () => boolean;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string, name: string) => Promise<void>;
@@ -52,7 +55,7 @@ export const AuthProvider: RFWC = ({ children }) => {
     }
   }
 
-  //本地验证jwt是否过期
+  //本地验证jwt是否过期,如果过期,返回false
   const validateJwt = () => {
     if (!jwt) return false;
     const exp = jwtDecode<{ exp: number }>(jwt).exp;
@@ -61,6 +64,29 @@ export const AuthProvider: RFWC = ({ children }) => {
       return false;
     }
     return true;
+  }
+
+  /**
+   * 用于处理请求返回的数据,如果code不为0,则提示错误信息,如果code为0,则提示成功信息
+   * 自动判断是否登录过期,如果过期,则提示登录过期,并且跳转到登录页面
+   * @param res 请求返回的数据
+   * @param callback 请求成功后的回调函数
+   */
+  const resCall = (res:ResponseData,callback:()=>void = () => {}) => {
+    if(!validateJwt() || res.code === -1){
+      message.destroy()
+      message.error('登录过期,请重新登录')
+      logout()
+      return
+    }
+    if(res.code !== 0){
+      message.destroy()
+      message.error(res.msg)
+      return
+    }
+    message.destroy()
+    message.success(res.msg)
+    callback()
   }
 
   // 登录方法
@@ -139,7 +165,7 @@ export const AuthProvider: RFWC = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ user, isLogin, isloading, validateJwt, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLogin, isloading,resCall, validateJwt, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
