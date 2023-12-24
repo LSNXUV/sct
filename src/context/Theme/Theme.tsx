@@ -1,7 +1,7 @@
 'use client'
 //全局主题配置
-import React, { KeyboardEventHandler, createContext, useContext, useEffect, useState } from 'react';
-import { App, ConfigProvider, Layout, Switch, theme } from 'antd';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { App, ConfigProvider, theme } from 'antd';
 import { useKeyWithThing } from '@/hooks/tool';
 import zhCN from 'antd/locale/zh_CN';
 export type Theme = 'light' | 'dark';

@@ -7,7 +7,7 @@
     "dev": "next dev",
     "tv": "next dev --turbo",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 6007",
     "lint": "next lint"
   },
   "dependencies": {

@@ -138,34 +138,38 @@ function Courses() {
         const newData = [...Courses];
         const index = newData.findIndex((item) => key === item.id);
         const res = await Course.save({ ...row, id: key as string })
-        Auth.resCall(res)
-        if (index > -1) {
-            const item = newData[index];
-            newData.splice(index, 1, {
-                ...item,
-                ...row,
-            });
-            setCourses(newData);
-            setEditingKey('');
-        } else {
-            newData.push(row);
-            setCourses(newData);
-            setEditingKey('');
-        }
+        Auth.resCall(res,() => {
+            if (index > -1) {
+                const item = newData[index];
+                newData.splice(index, 1, {
+                    ...item,
+                    ...row,
+                });
+                setCourses(newData);
+                setEditingKey('');
+            } else {
+                newData.push(row);
+                setCourses(newData);
+                setEditingKey('');
+            }
+        })
+        
     };
 
     const deleteCourses = async (key: React.Key) => {
         const newData = [...Courses];
         const index = newData.findIndex((item) => key === item.id);
         const res = await Course.deleteById(key as string)
-        Auth.resCall(res)
-        if (index > -1) {
-            newData.splice(index, 1);
-            setCourses(newData);
-            setEditingKey('');
-        } else {
-            message.error('删除失败')
-        }
+        Auth.resCall(res,() => {
+            if (index > -1) {
+                newData.splice(index, 1);
+                setCourses(newData);
+                setEditingKey('');
+            } else {
+                message.error('删除失败')
+            }
+        })
+        
     };
 
     const handleSearch = (

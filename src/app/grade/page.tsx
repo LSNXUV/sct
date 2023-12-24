@@ -108,34 +108,38 @@ function SCs() {
         const newData = [...SCs];
         const index = newData.findIndex((item) => key === item.id);
         const res = await SC.score(key,row.score)
-        Auth.resCall(res)
-        if (index > -1) {
-            const item = newData[index];
-            newData.splice(index, 1, {
-                ...item,
-                ...row,
-            });
-            setCourses(newData);
-            setEditingKey('');
-        } else {
-            newData.push(row);
-            setCourses(newData);
-            setEditingKey('');
-        }
+        Auth.resCall(res,() => {
+            if (index > -1) {
+                const item = newData[index];
+                newData.splice(index, 1, {
+                    ...item,
+                    ...row,
+                });
+                setCourses(newData);
+                setEditingKey('');
+            } else {
+                newData.push(row);
+                setCourses(newData);
+                setEditingKey('');
+            }
+        })
+        
     };
 
     const deleteSC = async (key: React.Key) => {
         const newData = [...SCs];
         const index = newData.findIndex((item) => key === item.id);
         const res = await SC.deleteById(key as string)
-        Auth.resCall(res)
-        if (index > -1) {
-            newData.splice(index, 1);
-            setCourses(newData);
-            setEditingKey('');
-        } else {
-            message.error('删除失败')
-        }
+        Auth.resCall(res,() => {
+            if (index > -1) {
+                newData.splice(index, 1);
+                setCourses(newData);
+                setEditingKey('');
+            } else {
+                message.error('删除失败')
+            }
+        })
+        
     };
 
     const handleSearch = (

@@ -36,29 +36,23 @@ const CourseAPI = {
 export const getAll = async () => {
     return await CourseAPI.all.request({});
 }
-
 export const searchByName = async (name:string) => {
     return await CourseAPI.searchByName.request({
         name
     });
 }
-
 export const save = async (course:CourseType) => {
     return await CourseAPI.save.request(course);
 }
-
 export const deleteById = async (id:string) => {
     return await CourseAPI.delete.request({
         id
     });
 }
-
-
 const Course = {
     getAll,
     searchByName,
     save,
     deleteById
 }
-
 export default Course

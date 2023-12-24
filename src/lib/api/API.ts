@@ -42,32 +42,23 @@ class API<Request extends object,Response extends ResponseData> {
      * @returns
      */
     async request(request: Request,auth:boolean = true):Promise<Response> {
-        const { type, path, endpoint } = this.definition;
-
+        const { type:method, path, endpoint } = this.definition;
         const url = endpoint ? endpoint + path : getAPI(path);
-
         return new Promise<Response>((resolve, reject) => {
             axios<ResponseData>({
-                method: type,
-                url,
+                method,url,
                 data: request,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    // 'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': auth ? `${localStorage.getItem('sk')}` : '',
                 }
             }).then((res) => {
                 const { code, msg, data } = res.data;
-                resolve({
-                    code,
-                    msg,
-                    ...(data ? { data } : {})
-                } as Response)
+                resolve({code,msg,...(data ? { data } : {})
+            } as Response)
             }).catch((err) => {
                 console.log(err);
-                resolve({
-                    code: -404,
-                    msg: '网络错误'
+                resolve({code: -404,msg: '网络错误'
                 } as Response);
             })
         })
