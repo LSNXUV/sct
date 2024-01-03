@@ -694,7 +694,7 @@ function Courses() {
                                                             <Popconfirm
                                                                 title="确定删除?"
                                                                 onConfirm={async () => {
-                                                                    const res = await TC.deleteById(record.id)
+                                                                    const res = await TC.deleteById(record.key)
                                                                     Auth.resCall(res, () => {
                                                                         setdetailCourseTeachers(detailCourseTeachers.filter((item) => item.id !== record.key))
                                                                     })

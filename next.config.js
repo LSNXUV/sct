@@ -10,4 +10,11 @@ export const sassOptions = {
     includePaths: [path.join(__dirname, 'styles')],
 };
 
+const nextConfig = {
+    output: 'export',
+    sassOptions,
+};
+
+export default nextConfig;
+
 

@@ -242,8 +242,9 @@ function SCs() {
             
             filters: [
                 { text: '计算机体系结构',value: '计算机体系结构'},
+                { text: 'hadoop',value: 'hadoop'},
                 { text: '软件工程',value: '软件工程'},
-                { text: '形势与政策',value: '形势与政策'},
+                { text: '形势与政策Ⅰ',value: '形势与政策Ⅰ'},
                 { text: '计算机网络',value: '计算机网络'},
                 { text: '操作系统',value: '操作系统'},
                 { text: '生态文明',value: '生态文明'}
